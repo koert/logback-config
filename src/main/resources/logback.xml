@@ -1,0 +1,61 @@
+<configuration>
+  <statusListener class="ch.qos.logback.core.status.OnConsoleStatusListener" />
+
+  <timestamp key="date" datePattern="yyyy-MM-dd'T'HHmmss"/>
+
+  <appender name="mainAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <filter class="logback.MdcDebugFilter">
+      <mdcKey>tempDebug</mdcKey>
+    </filter>
+    <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+      <level>INFO</level>
+    </filter>
+    <file>${com.sun.aas.instanceRoot}/logs/pas-debug.log</file>
+    <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+      <fileNamePattern>${com.sun.aas.instanceRoot}/logs/pas-debug-${date}.log</fileNamePattern>
+      <maxFileSize>1MB</maxFileSize>
+      <maxHistory>60</maxHistory>
+      <totalSizeCap>100MB</totalSizeCap>
+    </rollingPolicy>
+    <encoder>
+      <pattern>%d{ISO8601}|%level|%logger{36}|%line|%msg%n</pattern>
+    </encoder>
+  </appender>
+
+  <appender name="errorAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <file>${com.sun.aas.instanceRoot}/logs/pas-error.log</file>
+    <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+      <fileNamePattern>${com.sun.aas.instanceRoot}/logs/pas-error-${date}.log</fileNamePattern>
+      <maxFileSize>1MB</maxFileSize>
+      <totalSizeCap>50MB</totalSizeCap>
+    </rollingPolicy>
+    <encoder>
+      <pattern>%d{ISO8601}|%marker|%level|%logger{36}|%line|%X{requestId}|%X{sessionContext}|%msg%n</pattern>
+    </encoder>
+  </appender>
+
+  <appender name="contextAppender" class="logback.LogContextAppender">
+    <errorLogger>errorLogger</errorLogger>
+    <errorAppender>errorAppender</errorAppender>
+  </appender>
+
+  <logger name="com.netflix.hystrix.AbstractCommand" level="DEBUG"/>
+  <logger name="nl" level="DEBUG"/>
+  <logger name="org.eclipse.persistence.logging.default" level="DEBUG"/>
+  <logger name="org.eclipse.persistence.logging.metadata" level="WARN"/>
+  <logger name="org.eclipse.persistence.logging.sql" level="DEBUG"/>
+  <logger name="org.jboss" level="INFO"/>
+
+  <logger name="nl.mijnprivilege.pas.services.common.rest.logging" level="DEBUG">
+    <appender-ref ref="pasServiceAppender"/>
+  </logger>
+
+  <logger name="errorLogger">
+    <appender-ref ref="errorAppender"/>
+  </logger>
+
+  <root level="INFO">
+    <appender-ref ref="mainAppender"  />
+    <appender-ref ref="contextAppender"  />
+  </root>
+</configuration>
