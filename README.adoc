@@ -1,0 +1,15 @@
+= logback-config
+
+Configuration examples for logback
+
+== Log debugging context with error
+When you are developing software, you often come across unexpected situations that your software doesn't handle correctly.
+In order to figure out what caused the problem, you a detailed log of what happened and what the input data was, so that
+you can reproduce the situation in your development environment.
+
+Sometimes the end users will produce situations and errors that we never thought of.
+In those circumstances it is very helpful to examine the detailed logs.
+Because of this, we let the software log detailed debugging information, even on the production systems.
+The downside is that this will produce large log files, which may fill up file systems, and there is a performance penalty
+for writing all that data.
+

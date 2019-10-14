@@ -2,10 +2,12 @@ package logback;
 
 import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.spi.ILoggingEvent;
+import ch.qos.logback.classic.spi.LoggingEvent;
 import ch.qos.logback.core.Appender;
 import ch.qos.logback.core.AppenderBase;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.slf4j.Marker;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,7 +43,8 @@ public class LogContextAppender<E> extends AppenderBase<E> {
     events.get().add(event);
     if (event instanceof ILoggingEvent) {
       ILoggingEvent loggingEvent = (ILoggingEvent) event;
-      if (loggingEvent.getMarker().contains(MARKER_RESET_SESSION)) {
+      Marker marker = loggingEvent.getMarker();
+      if (marker != null && marker.contains(MARKER_RESET_SESSION)) {
         this.clearLog();
         events.get().add(event);
       }
@@ -60,6 +63,9 @@ public class LogContextAppender<E> extends AppenderBase<E> {
     if (incidentLogger != null) {
       Appender<ILoggingEvent> incidentAppender = ((ch.qos.logback.classic.Logger) incidentLogger).getAppender(this.errorAppender);
       if (incidentAppender != null) {
+        ILoggingEvent event0 = new LoggingEvent(LogContextAppender.class.getCanonicalName(), (ch.qos.logback.classic.Logger) incidentLogger,
+            Level.DEBUG, "Start error dump", null, null);
+        incidentAppender.doAppend(event0);
         for(E event:events.get()) {
           if (event instanceof ILoggingEvent) {
             incidentAppender.doAppend((ILoggingEvent) event);

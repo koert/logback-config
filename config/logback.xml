@@ -39,17 +39,6 @@
     <errorAppender>errorAppender</errorAppender>
   </appender>
 
-  <logger name="com.netflix.hystrix.AbstractCommand" level="DEBUG"/>
-  <logger name="nl" level="DEBUG"/>
-  <logger name="org.eclipse.persistence.logging.default" level="DEBUG"/>
-  <logger name="org.eclipse.persistence.logging.metadata" level="WARN"/>
-  <logger name="org.eclipse.persistence.logging.sql" level="DEBUG"/>
-  <logger name="org.jboss" level="INFO"/>
-
-  <logger name="nl.mijnprivilege.pas.services.common.rest.logging" level="DEBUG">
-    <appender-ref ref="pasServiceAppender"/>
-  </logger>
-
   <logger name="errorLogger">
     <appender-ref ref="errorAppender"/>
   </logger>
