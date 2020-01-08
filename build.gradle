@@ -1,6 +1,7 @@
 plugins {
   id 'java'
   id 'application'
+  id 'org.asciidoctor.jvm.convert' version '2.4.0'
 }
 
 group = "nl.zencode.logback"
@@ -17,4 +18,12 @@ dependencies {
 
 application {
   mainClassName = 'example.Main'
+}
+
+asciidoctor {
+  sourceDir file('docs')
+  sources {
+    include 'readme.adoc'
+  }
+  outputDir file('build/docs')
 }

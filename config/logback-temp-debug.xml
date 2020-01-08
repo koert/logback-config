@@ -1,13 +1,18 @@
 <configuration>
   <statusListener class="ch.qos.logback.core.status.OnConsoleStatusListener" />
 
+  <timestamp key="date" datePattern="yyyy-MM-dd'T'HHmmss"/>
+
   <appender name="mainAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <filter class="logback.MdcDebugFilter">
+      <mdcKey>tempDebug</mdcKey>
+    </filter>
     <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
       <level>INFO</level>
     </filter>
-    <file>debug.log</file>
+    <file>${com.sun.aas.instanceRoot}/logs/pas-debug.log</file>
     <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
-      <fileNamePattern>debug-%d{yyyyMMdd}-%i.log</fileNamePattern>
+      <fileNamePattern>${com.sun.aas.instanceRoot}/logs/pas-debug-${date}.log</fileNamePattern>
       <maxFileSize>1MB</maxFileSize>
       <maxHistory>60</maxHistory>
       <totalSizeCap>100MB</totalSizeCap>
@@ -18,9 +23,9 @@
   </appender>
 
   <appender name="errorAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
-    <file>error.log</file>
+    <file>${com.sun.aas.instanceRoot}/logs/pas-error.log</file>
     <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
-      <fileNamePattern>error-%d{yyyyMMdd}-%i.log</fileNamePattern>
+      <fileNamePattern>${com.sun.aas.instanceRoot}/logs/pas-error-${date}.log</fileNamePattern>
       <maxFileSize>1MB</maxFileSize>
       <totalSizeCap>50MB</totalSizeCap>
     </rollingPolicy>
@@ -38,7 +43,7 @@
     <appender-ref ref="errorAppender"/>
   </logger>
 
-  <root level="DEBUG">
+  <root level="INFO">
     <appender-ref ref="mainAppender"  />
     <appender-ref ref="contextAppender"  />
   </root>
